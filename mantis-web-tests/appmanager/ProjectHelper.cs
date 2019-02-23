@@ -43,8 +43,9 @@ namespace MantisWebTests
         }
         public ProjectHelper FillProjectForm(ProjectData project)
         {
-            driver.FindElement(By.Id("project-name")).Clear();
-            driver.FindElement(By.Id("project-name")).SendKeys(project.Name);
+            Type(By.Id("project-name"), project.Name);
+            //driver.FindElement(By.Id("project-name")).Clear();
+            //driver.FindElement(By.Id("project-name")).SendKeys(project.Name);
             return this;
         }
         public ProjectHelper SubmitProjectCreation()

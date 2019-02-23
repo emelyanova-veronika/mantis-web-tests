@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
@@ -18,7 +19,9 @@ namespace MantisWebTests
         protected NavigationHelper navigator;
         protected ProjectHelper projectHelper;
 
-        public ApplicationManager()
+        private static ThreadLocal<ApplicationManager> app = new ThreadLocal<ApplicationManager>();
+
+        private ApplicationManager()
         {
             driver = new FirefoxDriver();
             baseURL = "http://localhost/mantisbt-2.19.0/login_page.php";
@@ -27,8 +30,7 @@ namespace MantisWebTests
             navigator = new NavigationHelper(this, baseURL);
             projectHelper = new ProjectHelper(this);
         }
-
-        public void Stop()
+        ~ApplicationManager()
         {
             try
             {
@@ -39,6 +41,19 @@ namespace MantisWebTests
                 // Ignore errors if unable to close the browser
             }
         }
+
+        public static ApplicationManager GetInstance()
+        {
+            if (!app.IsValueCreated)
+            {
+                ApplicationManager newInstance = new ApplicationManager();
+                newInstance.Navigator.OpenHomePage();
+                app.Value = newInstance;
+
+            }
+            return app.Value;
+        }
+        
         public LoginHelper Auth
         {
             get { return loginHelper; }

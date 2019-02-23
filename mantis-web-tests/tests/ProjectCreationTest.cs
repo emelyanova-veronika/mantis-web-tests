@@ -7,13 +7,13 @@ using NUnit.Framework;
 namespace MantisWebTests
 {
     [TestFixture]
-    public class ProjectCreationTest : TestBase
+    public class ProjectCreationTest : AuthTestBase
     {
         [Test]
         public void ProjectCreationTests()
         {
             
-            ProjectData project = new ProjectData("004");
+            ProjectData project = new ProjectData("014");
 
             app.Projects.CreateProject(project);
         }

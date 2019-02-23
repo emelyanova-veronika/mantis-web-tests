@@ -19,12 +19,17 @@ namespace MantisWebTests
         }
         public void Login(AccountData account)
         {
-            driver.FindElement(By.Id("username")).Clear();
-            driver.FindElement(By.Id("username")).SendKeys(account.Username);
+            Type(By.Id("username"), account.Username);
             driver.FindElement(By.XPath("//input[@value='Войти']")).Click();
-            driver.FindElement(By.Id("password")).Clear();
-            driver.FindElement(By.Id("password")).SendKeys(account.Password);
+            Type(By.Id("password"), account.Password);
             driver.FindElement(By.XPath("//input[@value='Войти']")).Click();
+            //driver.FindElement(By.Id("username")).Clear();
+            //driver.FindElement(By.Id("username")).SendKeys(account.Username);
+            //
+            //driver.FindElement(By.Id("password")).Clear();
+            //driver.FindElement(By.Id("password")).SendKeys(account.Password);
+            //
+            
         }
     }
 }
