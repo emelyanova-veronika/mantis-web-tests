@@ -10,12 +10,22 @@ namespace MantisWebTests
     [TestFixture]
     public class ProjectCreationTest : AuthTestBase
     {
-        [Test]
-        public void ProjectCreationTests()
+        public static IEnumerable<ProjectData> RandomProjectDataProvider()
         {
-            
-            ProjectData project = new ProjectData("001");
+            List<ProjectData> projects = new List<ProjectData>();
+            for (int i = 0; i < 1; i++)
+            {
+                projects.Add(new ProjectData(GenerateRandomString(30)));
 
+            }
+            return projects;
+        }
+
+        
+
+        [Test,TestCaseSource("RandomProjectDataProvider")]
+        public void ProjectCreationTests(ProjectData project)
+        {
             List<ProjectData> oldProjects = app.Projects.GetProjectList();
 
             app.Projects.CreateProject(project);
