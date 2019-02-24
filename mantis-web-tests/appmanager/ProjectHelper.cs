@@ -38,14 +38,12 @@ namespace MantisWebTests
         }
         public ProjectHelper InitProjectCreation()
         {
-            driver.FindElement(By.XPath("//button[@type='submit']")).Click();
+            driver.FindElement(By.XPath("//input[@value='создать новый проект']")).Click();
             return this;
         }
         public ProjectHelper FillProjectForm(ProjectData project)
         {
             Type(By.Id("project-name"), project.Name);
-            //driver.FindElement(By.Id("project-name")).Clear();
-            //driver.FindElement(By.Id("project-name")).SendKeys(project.Name);
             return this;
         }
         public ProjectHelper SubmitProjectCreation()
@@ -60,8 +58,7 @@ namespace MantisWebTests
         }
         public ProjectHelper SelectProject(int index)
         {
-            driver.FindElement(By.XPath("(.//*[normalize-space(text()) and normalize-space(.)='Описание'])[1]/following::a[" + index + "]")).Click();
-            //driver.FindElement(By.CssSelector("td > a")).Click();
+            driver.FindElement(By.XPath("(.//*[normalize-space(text()) and normalize-space(.)='Описание'])[1]/following::a[" + (index+1) + "]")).Click();
             return this;
         }
         public ProjectHelper RemoveProject()
@@ -73,6 +70,23 @@ namespace MantisWebTests
         {
             driver.FindElement(By.XPath("//input[@value='Удалить проект']")).Click();
             return this;
+        }
+
+        public List<ProjectData> GetProjectList()
+        {
+            List<ProjectData> projects = new List<ProjectData>();
+            manager.Navigator.GoToControlInMainMenu();
+            manager.Navigator.GoToControlProjects();
+            // ICollection<IWebElement> elements = driver.FindElement(By.TagName("tbody")).FindElements(By.TagName("td"))[0].FindElements(By.TagName("a"));
+            //ICollection<IWebElement> elements = driver.FindElement(By.TagName("tbody")).FindElements(By.TagName("tr"))[0].FindElements(By.TagName("a"));
+            ICollection<IWebElement> elements = driver.FindElement(By.TagName("tbody")).FindElements(By.TagName("tr"));
+            foreach (IWebElement element in elements)
+            {
+                var cells = element.FindElements(By.TagName("a"));
+                projects.Add(new ProjectData(cells[0].Text));
+
+            }
+            return projects;
         }
     }
 }

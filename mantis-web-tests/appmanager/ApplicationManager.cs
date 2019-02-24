@@ -24,7 +24,7 @@ namespace MantisWebTests
         private ApplicationManager()
         {
             driver = new FirefoxDriver();
-            baseURL = "http://localhost/mantisbt-2.19.0/login_page.php";
+            baseURL = "http://localhost/mantisbt-1.3.17/login_page.php";
 
             loginHelper = new LoginHelper(this);
             navigator = new NavigationHelper(this, baseURL);

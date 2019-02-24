@@ -26,7 +26,7 @@ namespace MantisWebTests
 
         public void GoToControlInMainMenu()
         {
-            driver.FindElement(By.XPath("(.//*[normalize-space(text()) and normalize-space(.)='Управление'])[1]/preceding::i[1]")).Click();
+            driver.FindElement(By.LinkText("управление")).Click();
         }
         public void GoToControlProjects()
         {
