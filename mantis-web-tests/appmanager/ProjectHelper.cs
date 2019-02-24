@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
 
 namespace MantisWebTests
@@ -49,6 +54,7 @@ namespace MantisWebTests
         public ProjectHelper SubmitProjectCreation()
         {
             driver.FindElement(By.XPath("//input[@value='Добавить проект']")).Click();
+            cache = null;
             return this;
         }
         public ProjectHelper ReturnToControlProjects()
@@ -69,24 +75,46 @@ namespace MantisWebTests
         public ProjectHelper SubmitRemoveProject()
         {
             driver.FindElement(By.XPath("//input[@value='Удалить проект']")).Click();
+            cache = null;
             return this;
         }
 
+        public bool ExistProjectVerification()
+        {
+            var a = driver.FindElements(By.ClassName("form-container")).FirstOrDefault(x => x.Text.Contains("Проекты"));
+            var b = a.FindElement(By.TagName("tbody")).FindElements(By.TagName("tr"));
+
+            if (b.Count > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private List<ProjectData> cache = null;
+
         public List<ProjectData> GetProjectList()
         {
-            List<ProjectData> projects = new List<ProjectData>();
-            manager.Navigator.GoToControlInMainMenu();
-            manager.Navigator.GoToControlProjects();
-            // ICollection<IWebElement> elements = driver.FindElement(By.TagName("tbody")).FindElements(By.TagName("td"))[0].FindElements(By.TagName("a"));
-            //ICollection<IWebElement> elements = driver.FindElement(By.TagName("tbody")).FindElements(By.TagName("tr"))[0].FindElements(By.TagName("a"));
-            ICollection<IWebElement> elements = driver.FindElement(By.TagName("tbody")).FindElements(By.TagName("tr"));
-            foreach (IWebElement element in elements)
+            if (cache == null)
             {
-                var cells = element.FindElements(By.TagName("a"));
-                projects.Add(new ProjectData(cells[0].Text));
+                cache = new List<ProjectData>();
+                manager.Navigator.GoToControlInMainMenu();
+                manager.Navigator.GoToControlProjects();
 
+                ICollection<IWebElement> elements = driver.FindElement(By.TagName("tbody")).FindElements(By.TagName("tr"));
+                foreach (IWebElement element in elements)
+                {
+                    var cells = element.FindElements(By.TagName("a"));
+                    cache.Add(new ProjectData(cells[0].Text));
+
+                }
             }
-            return projects;
+            return new List<ProjectData>(cache);
+        }
+
+        public int GetProjectCount()
+        {
+            return driver.FindElement(By.TagName("tbody")).FindElements(By.TagName("tr")).Count;
         }
     }
 }

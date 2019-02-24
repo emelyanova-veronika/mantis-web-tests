@@ -8,11 +8,10 @@ namespace MantisWebTests
 {
     public class ProjectData : IEquatable<ProjectData>, IComparable<ProjectData>
     {
-        private string name;
-
+        
         public ProjectData(string name)
         {
-            this.name = name;
+            Name = name;
         }
 
         public bool Equals(ProjectData other)
@@ -43,10 +42,9 @@ namespace MantisWebTests
             }
             return Name.CompareTo(other.Name);
         }
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        public string Name { get; set; }
+
+       
+
     }
 }

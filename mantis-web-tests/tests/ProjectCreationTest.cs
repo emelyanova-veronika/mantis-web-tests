@@ -14,11 +14,13 @@ namespace MantisWebTests
         public void ProjectCreationTests()
         {
             
-            ProjectData project = new ProjectData("werty");
+            ProjectData project = new ProjectData("001");
 
             List<ProjectData> oldProjects = app.Projects.GetProjectList();
 
             app.Projects.CreateProject(project);
+
+            Assert.AreEqual(oldProjects.Count+1, app.Projects.GetProjectCount());
 
             List<ProjectData> newProjects = app.Projects.GetProjectList();
             oldProjects.Add(project);
