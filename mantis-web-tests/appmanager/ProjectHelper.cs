@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using mantis_web_tests.MantisWebTests;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
@@ -54,7 +55,7 @@ namespace MantisWebTests
         public ProjectHelper SubmitProjectCreation()
         {
             driver.FindElement(By.XPath("//input[@value='Добавить проект']")).Click();
-            cache = null;
+            _cache = null;
             return this;
         }
         public ProjectHelper ReturnToControlProjects()
@@ -75,7 +76,7 @@ namespace MantisWebTests
         public ProjectHelper SubmitRemoveProject()
         {
             driver.FindElement(By.XPath("//input[@value='Удалить проект']")).Click();
-            cache = null;
+            _cache = null;
             return this;
         }
 
@@ -91,9 +92,19 @@ namespace MantisWebTests
             return false;
         }
 
-        private List<ProjectData> cache = null;
+        private List<ProjectData> _cache;
 
         public List<ProjectData> GetProjectList()
+        {
+            if (_cache != null) return new List<ProjectData>(_cache);
+            _cache = new List<ProjectData>();
+            MantisConnectPortTypeClient cl = new MantisConnectPortTypeClient();
+            var a = cl.mc_projects_get_user_accessible("administrator", "root");
+            _cache.AddRange(a.Select(x => new ProjectData(x.name)));
+            return new List<ProjectData>(_cache);
+        }
+
+        /*public List<ProjectData> GetProjectList()
         {
             if (cache == null)
             {
@@ -110,7 +121,7 @@ namespace MantisWebTests
                 }
             }
             return new List<ProjectData>(cache);
-        }
+        }*/
 
         public int GetProjectCount()
         {

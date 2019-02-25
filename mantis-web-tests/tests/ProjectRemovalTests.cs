@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using mantis_web_tests.MantisWebTests;
 using NUnit.Framework;
 
 namespace MantisWebTests 
@@ -17,7 +18,8 @@ namespace MantisWebTests
             app.Navigator.GoToControlProjects();
             if (!app.Projects.ExistProjectVerification())
             {
-                app.Projects.CreateProject(new ProjectData("24022019"));
+                MantisConnectPortTypeClient cl = new MantisConnectPortTypeClient();
+                cl.mc_project_add("administrator", "root", new mantis_web_tests.MantisWebTests.ProjectData{name = "123"});
             }
             List<ProjectData> oldProjects = app.Projects.GetProjectList();
 
